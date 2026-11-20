@@ -1,5 +1,8 @@
 # dsh-travel-kit
 
+[![CI](https://github.com/EastMG/dsh-travel-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/EastMG/dsh-travel-kit/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/dsh-travel-kit.svg)](https://www.npmjs.com/package/dsh-travel-kit)
+
 给 AI Agent 用的旅行工具链。把「查票 → 选酒店 → 排路线 → 导日历」串成一条可执行的链路。
 
 零依赖，只用 Node 内置模块。技能用 `SKILL.md` 格式，DSH / Claude Code / OpenClaw 等读同一套。

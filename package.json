@@ -27,12 +27,14 @@
   "files": [
     "bin",
     "skills",
-    "scripts",
+    "scripts/install.js",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "scripts": {
-    "test": "node bin/dsh-travel.js doctor"
+    "test": "node scripts/test.js",
+    "test:doctor": "node bin/dsh-travel.js doctor"
   },
   "engines": {
     "node": ">=18"
