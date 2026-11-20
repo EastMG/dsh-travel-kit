@@ -13,6 +13,14 @@
     "ics"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EastMG/dsh-travel-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EastMG/dsh-travel-kit/issues"
+  },
+  "homepage": "https://github.com/EastMG/dsh-travel-kit#readme",
   "bin": {
     "dsh-travel": "bin/dsh-travel.js"
   },
