@@ -1,6 +1,6 @@
 {
   "name": "dsh-travel-kit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "旅行工具链：高德路线规划 + 携程问道 + 飞猪查询，含通勤矩阵、行程时间轴编排与 iCalendar 导出",
   "keywords": [
     "travel",

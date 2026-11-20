@@ -5,13 +5,23 @@
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-11-20
+
+仅文档与工程化，运行代码未变。
+
 ### Added
 
-- `CHANGELOG.md`
+- `CHANGELOG.md`（本文件）
 - GitHub Actions CI：ubuntu × Node 18/20/22 + windows × Node 22
 - `scripts/test.js` 离线自测（22 项）：语法、CLI 行为、无 Key 降级、安装幂等、凭证泄露防护
 - `scripts/check-pack.js` 打包内容校验：必需文件都在、测试脚本不外泄
 - README 增加 CI 与 npm 版本徽章
+
+### Changed
+
+- `package.json` 的 `files` 从整个 `scripts` 目录收紧为 `scripts/install.js`，
+  避免把 `test.js` / `check-pack.js` 打进 npm 包
+- CI 的 `actions/checkout` 与 `actions/setup-node` 升级到 v7，消除 Node 20 弃用告警
 
 ## [1.0.1] - 2026-11-20
 
@@ -58,6 +68,7 @@
 - 不具备下单与支付能力：飞猪、携程、高德对个人 Agent 均未开放
 - `.ics` 仅通过 RFC 5545 结构校验（CRLF、75 字节行宽、VEVENT 配平），未在真机 iOS / Android 日历导入验证
 
-[Unreleased]: https://github.com/EastMG/dsh-travel-kit/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/EastMG/dsh-travel-kit/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/EastMG/dsh-travel-kit/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/EastMG/dsh-travel-kit/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/EastMG/dsh-travel-kit/releases/tag/v1.0.0
