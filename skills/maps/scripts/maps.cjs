@@ -25,7 +25,8 @@ const path = require('path');
 
 const CONFIG_DIR = path.join(os.homedir(), '.dsh-maps');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
-const UA = 'dsh-maps-skill/1.0';
+// Nominatim 的使用政策要求带可识别的 User-Agent，这里带上包名与仓库地址
+const UA = 'dsh-travel-kit (+https://github.com/EastMG/dsh-travel-kit)';
 
 const AMAP_BASE = 'https://restapi.amap.com';
 
@@ -393,7 +394,19 @@ function parseOpenTime(text) {
 
 /* ----------------------------- OSM 兜底 ----------------------------- */
 
+/**
+ * Nominatim 使用政策：绝对不超过 1 请求/秒，且必须带可识别的 UA。
+ * 同一进程内串行节流，避免重试逻辑连发。
+ */
+let lastOsmAt = 0;
+async function osmThrottle() {
+  const wait = 1100 - (Date.now() - lastOsmAt);
+  if (wait > 0) await sleep(wait);
+  lastOsmAt = Date.now();
+}
+
 async function osmSearch(q, limit) {
+  await osmThrottle();
   const u = new URL('https://nominatim.openstreetmap.org/search');
   u.searchParams.set('q', q);
   u.searchParams.set('format', 'json');
@@ -457,6 +470,8 @@ async function osmRoute(from, to, mode) {
       `OSM 兜底只支持 driving（当前 mode=${mode}）。要 ${mode}，请配 AMAP_MAPS_API_KEY 走高德。`
     );
   }
+  // OSRM 公共 demo server 仅限轻量测试，同样按 1 请求/秒节流
+  await osmThrottle();
   const u = new URL(
     `https://router.project-osrm.org/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}`
   );

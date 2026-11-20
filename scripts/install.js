@@ -14,7 +14,10 @@ const os = require('os');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const SKILL_NAMES = ['maps', 'wendao'];
+const SKILL_NAMES = [
+  { name: 'maps', experimental: false },
+  { name: 'wendao', experimental: true },
+];
 
 const MAPS_KEY_FILE = path.join(os.homedir(), '.dsh-maps', 'config.json');
 const WENDAO_KEY_FILE = path.join(os.homedir(), '.wendao', 'config.json');
@@ -60,29 +63,37 @@ function main(argv) {
   fs.mkdirSync(target, { recursive: true });
   const results = [];
 
-  for (const name of SKILL_NAMES) {
+  for (const entry of SKILL_NAMES) {
+    const { name, experimental } = entry;
     const src = path.join(ROOT, 'skills', name);
     const dst = path.join(target, name);
     if (!fs.existsSync(src)) {
-      results.push({ skill: name, status: 'missing-source' });
+      results.push({ skill: name, experimental, status: 'missing-source' });
       continue;
     }
     if (fs.existsSync(dst)) {
       if (!force) {
-        results.push({ skill: name, status: 'skipped-exists', path: dst });
+        results.push({ skill: name, experimental, status: 'skipped-exists', path: dst });
         continue;
       }
       fs.rmSync(dst, { recursive: true, force: true });
     }
     fs.cpSync(src, dst, { recursive: true });
-    results.push({ skill: name, status: 'installed', path: dst });
+    results.push({ skill: name, experimental, status: 'installed', path: dst });
   }
 
   if (quiet) return 0;
 
   for (const r of results) {
     const icon = r.status === 'installed' ? '✓' : r.status === 'skipped-exists' ? '·' : '✗';
-    process.stdout.write(`${icon} ${r.skill.padEnd(8)} ${r.status}${r.path ? '  ' + r.path : ''}\n`);
+    const tag = r.experimental ? '  [实验性]' : '';
+    process.stdout.write(`${icon} ${r.skill.padEnd(8)} ${r.status}${tag}${r.path ? '  ' + r.path : ''}\n`);
+  }
+
+  if (results.some((r) => r.experimental && r.status === 'installed')) {
+    process.stdout.write(
+      '\n注意：wendao 是实验性模块 —— 它调用的接口没有公开文档，可能随时失效，也可能不符合携程服务条款。\n'
+    );
   }
 
   if (results.some((r) => r.status === 'skipped-exists')) {
